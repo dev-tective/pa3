@@ -12,14 +12,9 @@ import jakarta.servlet.http.HttpServletResponse;
 import java.io.IOException;
 import java.time.LocalDate;
 
-@WebServlet("contacts")
+@WebServlet(name = "ContactsServlet", urlPatterns = {"", "/contacts"})
 public class ContactController extends HttpServlet {
     private final ContactService contactService = ContactServiceImpl.instance;
-
-    @Override
-    public void init() throws ServletException {
-        System.out.println("✅ ContactController inicializado correctamente.");
-    }
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
