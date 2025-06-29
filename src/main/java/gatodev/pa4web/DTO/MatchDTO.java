@@ -13,7 +13,7 @@ import java.util.List;
 @ToString
 public class MatchDTO {
     private Integer id;
-    private String phase;
+    private Integer phase;
     private String state;
     private List<ParticipantDTO> participants;
     private ParticipantDTO winner;

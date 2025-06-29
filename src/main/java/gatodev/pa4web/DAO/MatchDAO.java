@@ -16,12 +16,12 @@ public class MatchDAO implements DAO<Match, Integer> {
         String sql = """
                 CREATE TABLE IF NOT EXISTS matches (
                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                    phase VARCHAR(30),
+                    phase INT,
                     state VARCHAR(20),
                     id_league BIGINT REFERENCES leagues,
-                    first_fighter BIGINT REFERENCES fighters,
-                    second_fighter BIGINT REFERENCES fighters,
-                    winning_fighter BIGINT REFERENCES fighters
+                    first_participant BIGINT REFERENCES participants,
+                    second_participant BIGINT REFERENCES participants,
+                    winning_participant BIGINT REFERENCES participants
                 );
                 """;
         
@@ -40,9 +40,9 @@ public class MatchDAO implements DAO<Match, Integer> {
                     phase,
                     state,
                     id_league,
-                    first_fighter,
-                    second_fighter,
-                    winning_fighter
+                    first_participant,
+                    second_participant,
+                    winning_participant
                 )
                 VALUES(?,?,?,?,?,?)
                 """;
@@ -59,12 +59,12 @@ public class MatchDAO implements DAO<Match, Integer> {
     }
 
     private void setMatch(Match match, PreparedStatement ps) throws SQLException {
-        ps.setString(1, match.getPhase());
+        ps.setInt(1, match.getPhase());
         ps.setString(2, match.getState());
         ps.setInt(3, match.getIdLeague());
-        ps.setInt(4, match.getIdFirstFighter());
-        ps.setInt(5, match.getIdSecondFighter());
-        ps.setInt(6, match.getIdWinningFighter());
+        ps.setInt(4, match.getIdFirstParticipant());
+        ps.setInt(5, match.getIdSecondParticipant());
+        ps.setInt(6, match.getIdWinningParticipant());
     }
 
     @Override
@@ -74,9 +74,9 @@ public class MatchDAO implements DAO<Match, Integer> {
                     phase = ?,
                     state = ?,
                     id_league = ?,
-                    first_fighter = ?,
-                    second_fighter = ?,
-                    winning_fighter = ?
+                    first_participant = ?,
+                    second_participant = ?,
+                    winning_participant = ?
                 WHERE id = ?
                 """;
         
@@ -112,11 +112,11 @@ public class MatchDAO implements DAO<Match, Integer> {
         while (rs.next()) {
             matches.add(Match.builder()
                     .id(rs.getInt("id"))
-                    .phase(rs.getString("phase"))
+                    .phase(rs.getInt("phase"))
                     .state(rs.getString("state"))
                     .idLeague(rs.getInt("id_league"))
-                    .idFirstFighter(rs.getInt("id_first_fighter"))
-                    .idSecondFighter(rs.getInt("id_second_fighter"))
+                    .idFirstParticipant(rs.getInt("id_first_participant"))
+                    .idSecondParticipant(rs.getInt("id_second_participant"))
                     .build());
         }
         
@@ -135,11 +135,25 @@ public class MatchDAO implements DAO<Match, Integer> {
 
         return !rs.next() ? Optional.empty() : Optional.of(Match.builder()
                 .id(rs.getInt("id"))
-                .phase(rs.getString("phase"))
+                .phase(rs.getInt("phase"))
                 .state(rs.getString("state"))
                 .idLeague(rs.getInt("id_league"))
-                .idFirstFighter(rs.getInt("id_first_fighter"))
-                .idSecondFighter(rs.getInt("id_second_fighter"))
+                .idFirstParticipant(rs.getInt("id_first_participant"))
+                .idSecondParticipant(rs.getInt("id_second_participant"))
                 .build());
+    }
+
+    public Optional<Integer> maxPhase(Integer idLeague) throws SQLException {
+        String query = """
+                SELECT phase FROM matches
+                WHERE id_league = ?
+                ORDER BY phase DESC LIMIT 1
+                """;
+
+        PreparedStatement ps = con.prepareStatement(query);
+        ps.setInt(1, idLeague);
+        ResultSet rs = ps.executeQuery();
+
+        return rs.next() ? Optional.of(rs.getInt(1)) : Optional.empty();
     }
 }

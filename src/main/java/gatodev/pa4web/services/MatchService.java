@@ -10,6 +10,8 @@ public interface MatchService {
 
     Match addMatch(Match match);
 
+    Match updateMatch(Match match);
+
     boolean deleteMatch(int matchId);
 
     Match getMatch(int id);
@@ -17,6 +19,10 @@ public interface MatchService {
     List<Match> getMatches();
 
     void generateRandomMatches(Integer idLeague, List<Integer> idParticipants);
+
+    boolean declareMatch(Integer idMatch, Integer idWinner);
+
+    boolean nextPhaseMatches(Integer idLeague);
 
     MatchDTO convertMatchToDTO(Match match, List<ParticipantDTO> participants, ParticipantDTO winner);
 }

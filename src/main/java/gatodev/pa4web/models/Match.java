@@ -10,10 +10,10 @@ import lombok.*;
 @AllArgsConstructor
 public class Match {
     private Integer id;
-    private String phase;
+    private Integer phase;
     private String state;
     private Integer idLeague;
-    private Integer idFirstFighter;
-    private Integer idSecondFighter;
-    private Integer idWinningFighter;
+    private Integer idFirstParticipant;
+    private Integer idSecondParticipant;
+    private Integer idWinningParticipant;
 }
