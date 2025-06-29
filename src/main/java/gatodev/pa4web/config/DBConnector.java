@@ -1,4 +1,4 @@
-package gatodev.pa3web.config;
+package gatodev.pa4web.config;
 
 import lombok.Getter;
 

@@ -1,7 +1,7 @@
-package gatodev.pa3web.DAO;
+package gatodev.pa4web.DAO;
 
-import gatodev.pa3web.config.DBConnector;
-import gatodev.pa3web.models.Match;
+import gatodev.pa4web.config.DBConnector;
+import gatodev.pa4web.models.Match;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class MatchDAO implements DAO<Match, Integer> {
     private final Connection con = DBConnector.dbConnector.getCon();
-    public final MatchDAO instance = new MatchDAO();
+    public static final MatchDAO instance = new MatchDAO();
 
     private MatchDAO() {
         String sql = """

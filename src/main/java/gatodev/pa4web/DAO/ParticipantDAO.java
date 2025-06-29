@@ -1,7 +1,7 @@
-package gatodev.pa3web.DAO;
+package gatodev.pa4web.DAO;
 
-import gatodev.pa3web.config.DBConnector;
-import gatodev.pa3web.models.Participant;
+import gatodev.pa4web.config.DBConnector;
+import gatodev.pa4web.models.Participant;
 
 import java.sql.*;
 import java.util.ArrayList;
@@ -10,7 +10,7 @@ import java.util.Optional;
 
 public class ParticipantDAO implements DAO<Participant, Integer> {
     private final Connection con = DBConnector.dbConnector.getCon();
-    public final ParticipantDAO instance = new ParticipantDAO();
+    public final static ParticipantDAO instance = new ParticipantDAO();
 
     //Siempre instanciar después de leagues y fighters
     private ParticipantDAO() {

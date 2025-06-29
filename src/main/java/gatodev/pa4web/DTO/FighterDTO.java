@@ -1,6 +1,6 @@
-package gatodev.pa3web.DTO;
+package gatodev.pa4web.DTO;
 
-import gatodev.pa3web.models.Academy;
+import gatodev.pa4web.models.Academy;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;

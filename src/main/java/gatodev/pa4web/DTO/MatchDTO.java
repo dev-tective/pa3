@@ -1,4 +1,4 @@
-package gatodev.pa3web.models;
+package gatodev.pa4web.DTO;
 
 import lombok.Builder;
 import lombok.Getter;
@@ -11,12 +11,10 @@ import java.util.List;
 @Setter
 @Builder
 @ToString
-public class Match {
+public class MatchDTO {
     private Integer id;
     private String phase;
     private String state;
-    private Integer idLeague;
-    private Integer idFirstFighter;
-    private Integer idSecondFighter;
-    private Integer idWinningFighter;
+    private List<ParticipantDTO> participants;
+    private ParticipantDTO winner;
 }

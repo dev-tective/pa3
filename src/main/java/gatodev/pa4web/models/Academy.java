@@ -1,4 +1,4 @@
-package gatodev.pa3web.models;
+package gatodev.pa4web.models;
 
 import lombok.*;
 

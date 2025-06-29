@@ -1,7 +1,7 @@
-package gatodev.pa3web.DAO;
+package gatodev.pa4web.DAO;
 
-import gatodev.pa3web.config.DBConnector;
-import gatodev.pa3web.models.Fighter;
+import gatodev.pa4web.config.DBConnector;
+import gatodev.pa4web.models.Fighter;
 
 import java.sql.*;
 import java.util.ArrayList;

@@ -1,4 +1,4 @@
-<%@ page import="gatodev.pa3web.models.Contact" %>
+<%@ page import="gatodev.pa4web.models.Contact" %>
 <%@ page import="java.util.List" %>
 <%@ page contentType="text/html; charset=UTF-8" pageEncoding="UTF-8" %>
 <!DOCTYPE html>

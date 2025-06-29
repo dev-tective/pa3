@@ -1,5 +1,6 @@
-package gatodev.pa3web.DTO;
+package gatodev.pa4web.DTO;
 
+import gatodev.pa4web.models.League;
 import lombok.Builder;
 import lombok.Getter;
 import lombok.Setter;
@@ -14,5 +15,5 @@ public class ParticipantDTO {
     private Integer place;
     private String state;
     private FighterDTO fighter;
-    private Integer idLeague;
+    private League league;
 }
