@@ -39,7 +39,7 @@
                                 <input type="hidden" name="id" value="<%= c.getId() %>"/>
                                 <input type="hidden" name="_method" value="delete"/>
                                 <button type="submit" class="btn btn-danger btn-sm">
-                                    <i class="bi bi-trash"></i>Eliminar
+                                    <i class="bi bi-trash"></i> Eliminar
                                 </button>
                             </form>
                         </td>

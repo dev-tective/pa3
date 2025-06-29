@@ -1,6 +1,6 @@
 package gatodev.pa3web.services;
 
-import gatodev.pa3web.dao.ContactDAO;
+import gatodev.pa3web.DAO.ContactDAO;
 import gatodev.pa3web.models.Contact;
 
 import java.sql.SQLException;
@@ -31,9 +31,9 @@ public class ContactServiceImpl implements ContactService {
     }
 
     @Override
-    public String deleteContact(Contact contact) {
+    public String deleteContact(long id) {
         try {
-            boolean deleted = contactDAO.deleteById(contact.getId());
+            boolean deleted = contactDAO.deleteById(id);
             return deleted ? "Contacto eliminado exitosamente" :
                     "No se encontró el contacto para eliminar";
         } catch (SQLException e) {

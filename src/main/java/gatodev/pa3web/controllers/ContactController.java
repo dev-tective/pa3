@@ -24,6 +24,22 @@ public class ContactController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+
+        if ("delete".equalsIgnoreCase(method)) {
+            String idParam = req.getParameter("id");
+            if (idParam != null && !idParam.isEmpty()) {
+                try {
+                    long id = Long.parseLong(idParam);
+                    contactService.deleteContact(id);
+                } catch (NumberFormatException e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+            resp.sendRedirect(req.getContextPath() + "/contacts");
+            return;
+        }
+
         Contact contact = parseContact(req);
         contactService.addContact(contact);
         resp.sendRedirect(req.getContextPath() + "/contacts");

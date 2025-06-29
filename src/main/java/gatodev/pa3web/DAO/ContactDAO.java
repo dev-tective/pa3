@@ -1,4 +1,4 @@
-package gatodev.pa3web.dao;
+package gatodev.pa3web.DAO;
 
 import gatodev.pa3web.config.DBConnector;
 import gatodev.pa3web.models.Contact;

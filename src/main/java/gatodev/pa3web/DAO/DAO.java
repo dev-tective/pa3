@@ -1,4 +1,4 @@
-package gatodev.pa3web.dao;
+package gatodev.pa3web.DAO;
 
 import java.sql.SQLException;
 import java.util.List;

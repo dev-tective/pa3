@@ -7,7 +7,7 @@ import java.util.List;
 public interface ContactService {
     Contact addContact(Contact contact);
     Contact updateContact(Contact contact);
-    String deleteContact(Contact contact);
+    String deleteContact(long id);
     List<Contact> getAllContacts();
     Contact getContactById(int id);
 }
