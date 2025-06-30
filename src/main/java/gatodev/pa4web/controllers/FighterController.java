@@ -30,6 +30,7 @@ public class FighterController extends HttpServlet {
                         .convertToFighterDTO(f, academyService.get(f.getIdAcademy())))
                 .collect(Collectors.toList());
 
+        req.setAttribute("academies", academyService.getAll());
         req.setAttribute("fighters", fighters);
         req.getRequestDispatcher("fighter.jsp").forward(req, resp);
     }

@@ -17,23 +17,23 @@ public class AcademyController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("academies", academyService.getAll());
+        req.setAttribute("academies", academyService.getAll().toArray(new Academy[0]));
         req.getRequestDispatcher("/academy.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("AcademyName").trim();
-        String ruc = req.getParameter("ruc").trim();
+        String name = req.getParameter("academyName");
+        String ruc = req.getParameter("ruc");
 
-        if (name.isEmpty() || ruc.isEmpty()) {
+        if (name == null || name.trim().isEmpty() || ruc == null || ruc.trim().isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre y ruc son obligatorios.");
             return;
         }
 
         String method = req.getParameter("_method");
 
-        if ("update".equalsIgnoreCase(method)) {
+        if (method != null && "update".equalsIgnoreCase(method.trim())) {
             String id = req.getParameter("id").trim();
 
             if (id.isEmpty()) {
