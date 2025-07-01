@@ -13,8 +13,6 @@ document.getElementById('academySearch').addEventListener('input', function () {
     });
 });
 
-// Ya no necesitas duplicar el script de edición aquí porque se inyectó en la propia JSP
-// Pero si prefieres, puedes centralizarlo aquí también:
 document.querySelectorAll('.toggle-edit').forEach(btn => {
     btn.addEventListener('click', function () {
         const form = this.closest('.edit-form');

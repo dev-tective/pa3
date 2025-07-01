@@ -29,23 +29,6 @@
                    placeholder="Buscar academia por nombre...">
         </div>
 
-        <script>
-            document.querySelectorAll('.toggle-edit').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const form = this.closest('.edit-form');
-                    const nameInput = form.querySelector('input[name="academyName"]');
-                    const rucInput = form.querySelector('input[name="ruc"]');
-                    const confirmBtn = form.querySelector('.confirm-edit');
-
-                    nameInput.removeAttribute('readonly');
-                    rucInput.removeAttribute('readonly');
-                    nameInput.focus();
-                    this.classList.add('d-none');
-                    confirmBtn.classList.remove('d-none');
-                });
-            });
-        </script>
-
         <!-- Mostrar academias existentes -->
         <div class="row justify-content-center" id="academyContainer">
             <% for (Academy academy : academies) { %>

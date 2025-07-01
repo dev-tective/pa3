@@ -1,5 +1,6 @@
 <%@ page contentType="text/html;charset=UTF-8" %>
-<%@ page import="gatodev.pa4web.models.League" %>
+<%@ page import="gatodev.pa4web.DTO.FighterDTO" %>
+<%@ page import="gatodev.pa4web.models.Academy" %>
 <!DOCTYPE html>
 <html lang="es">
 <head>
@@ -14,62 +15,85 @@
 </head>
 <body>
 
-    <% League[] leagues = (League[]) request.getAttribute("leagues"); %>
+    <% FighterDTO[] fighters = (FighterDTO[]) request.getAttribute("fighters"); %>
+    <% Academy[] academies = (Academy[]) request.getAttribute("academies"); %>
 
     <%@ include file="navbar.jsp" %>
 
-    <div class="container py-5">
-        <h1 class="text-center mb-4">Ligas Registradas</h1>
+    <h1 class="text-center mb-4">Luchadores Registrados</h1>
 
-        <!-- Buscador de ligas -->
-        <div class="mb-4">
-            <input type="text"
-                   id="leagueSearch"
-                   class="form-control"
-                   placeholder="Buscar liga por nombre...">
-        </div>
+    <!-- Buscador de luchadores -->
+    <div class="mb-4">
+        <input type="text"
+               id="fighterSearch"
+               class="form-control"
+               placeholder="Buscar luchador por nombre...">
+    </div>
 
-        <script>
-            document.querySelectorAll('.toggle-edit').forEach(btn => {
-                btn.addEventListener('click', function () {
-                    const form = this.closest('.edit-form');
-                    const input = form.querySelector('input[name="leagueName"]');
-                    const confirmBtn = form.querySelector('.confirm-edit');
+    <!-- Despliegue de todos los luchadores -->
+    <div class="row justify-content-center" id="leagueContainer">
+        <% for (FighterDTO fighter : fighters) { %>
+        <div class="col-md-4 mb-4 fighter-item">
+            <div class="card fighter-card h-100">
+                <div class="card-body d-flex flex-column justify-content-between">
+                    <div class="text-center mb-2">
+                        <form method="post"
+                              class="edit-form d-flex flex-column align-items-center"
+                              action="fighter"
+                              style="gap: 0.5rem;">
+                            <input type="hidden" name="_method" value="update">
+                            <input type="hidden" name="id" value="<%= fighter.getId() %>">
 
-                    input.removeAttribute('readonly');
-                    input.focus();
-                    this.classList.add('d-none');
-                    confirmBtn.classList.remove('d-none');
-                });
-            });
-        </script>
+                            <input type="text"
+                                   name="fullName"
+                                   class="form-control text-center"
+                                   style="width: 80%;"
+                                   value="<%= fighter.getFullName() %>"
+                                   readonly>
 
-        <!-- Despliegue de todas las ligas -->
-        <div class="row justify-content-center" id="leagueContainer">
+                            <input type="number"
+                                   name="age"
+                                   class="form-control text-center"
+                                   style="width: 80%;"
+                                   value="<%= fighter.getAge() %>"
+                                   readonly>
 
-            <%
-                for (League league : leagues) {
-            %>
+                            <input type="number"
+                                   name="weight"
+                                   class="form-control text-center"
+                                   style="width: 80%;"
+                                   value="<%= fighter.getWeight().replace("kg", "") %>"
+                                   readonly>
 
-            <div class="col-md-4 mb-4 league-item">
-                <div class="card league-card h-100">
-                    <div class="card-body d-flex flex-column justify-content-between">
-                        <!-- Nombre editable -->
-                        <div class="text-center mb-2">
-                            <form method="post"
-                                  class="edit-form d-flex justify-content-center align-items-center"
-                                  style="gap: 0.5rem;"
-                                  action="league">
-                                <input type="hidden" name="_method" value="update">
-                                <input type="hidden" name="id" value="<%= league.getId() %>">
+                            <select name="gender" class="form-control text-center" style="width: 80%;" disabled>
+                                <option selected><%= fighter.getGender() %></option>
+                                <option value="Masculino">Masculino</option>
+                                <option value="Femenino">Femenino</option>
+                            </select>
 
-                                <input type="text"
-                                       name="leagueName"
-                                       class="form-control text-center name"
-                                       style="width: 60%;"
-                                       value="<%= league.getName() %>"
-                                       readonly>
+                            <select name="rank" class="form-control text-center" style="width: 80%;" disabled>
+                                <option selected><%= fighter.getRank() %></option>
+                                <% for (int i = 10; i >= 1; i--) { %>
+                                <option value="<%= i + " kyu" %>"><%= i + " kyu" %></option>
+                                <% } %>
+                            </select>
 
+                            <select name="modality" class="form-control text-center" style="width: 80%;" disabled>
+                                <option selected><%= fighter.getModality() %></option>
+                                <option value="Kata">Kata</option>
+                                <option value="Kumite">Kumite</option>
+                            </select>
+
+                            <select name="idAcademy" class="form-control text-center" style="width: 80%;" disabled>
+                                <option selected value="<%= fighter.getAcademy().getId() %>"><%= fighter.getAcademy().getName() %></option>
+                                <% for (Academy academy : academies) {
+                                    if (!academy.getId().equals(fighter.getAcademy().getId())) { %>
+                                <option value="<%= academy.getId() %>"><%= academy.getName() %></option>
+                                <%   }
+                                } %>
+                            </select>
+
+                            <div class="d-flex justify-content-center gap-2">
                                 <button type="button" class="btn btn-sm btn-outline-secondary toggle-edit" title="Editar">
                                     <i class="bi bi-pencil-square"></i>
                                 </button>
@@ -77,48 +101,63 @@
                                 <button type="submit" class="btn btn-sm btn-success d-none confirm-edit" title="Guardar">
                                     <i class="bi bi-check-lg"></i>
                                 </button>
-                            </form>
-                        </div>
-
-                        <!-- Acciones -->
-                        <div class="d-grid gap-2 mt-3">
-                            <a href="participant?leagueId=<%= league.getId() %>" class="btn btn-outline-light">Ver Participantes</a>
-                            <a href="match?leagueId=<%= league.getId() %>" class="btn btn-outline-warning">Ver Partidos</a>
-                        </div>
+                            </div>
+                        </form>
                     </div>
                 </div>
             </div>
+        </div>
+        <% } %>
 
-            <%
-                }
-            %>
+        <!-- Tarjeta para agregar nuevo luchador -->
+        <div class="col-md-4 mb-4 fighter-item">
+            <div class="card fighter-card h-100 border-success">
+                <div class="card-body d-flex flex-column justify-content-center">
+                    <form method="post"
+                          class="d-flex flex-column align-items-center"
+                          action="fighter"
+                          style="gap: 1rem;">
 
-            <!-- Tarjeta para agregar nueva liga -->
-            <div class="col-md-4 mb-4 league-item">
-                <div class="card league-card h-100 border-success">
-                    <div class="card-body d-flex flex-column justify-content-center">
-                        <form method="post"
-                              class="d-flex flex-column align-items-center"
-                              action="league"
-                              style="gap: 1rem;">
-                            <input type="text"
-                                   name="leagueName"
-                                   class="form-control text-center"
-                                   style="width: 80%;"
-                                   placeholder="Nueva liga..."
-                                   required>
+                        <input type="text" name="fullName" class="form-control text-center" style="width: 80%;" placeholder="Nombre completo" required>
+                        <input type="number" name="age" class="form-control text-center" style="width: 80%;" placeholder="Edad" required>
+                        <input type="number" name="weight" class="form-control text-center" style="width: 80%;" placeholder="Peso (kg)" required>
 
-                            <button type="submit" class="btn btn-success">
-                                <i class="bi bi-plus-circle me-1"></i> Agregar Liga
-                            </button>
-                        </form>
-                    </div>
+                        <select name="gender" class="form-control text-center" style="width: 80%;" required>
+                            <option value="">Género</option>
+                            <option value="Masculino">Masculino</option>
+                            <option value="Femenino">Femenino</option>
+                        </select>
+
+                        <select name="rank" class="form-control text-center" style="width: 80%;" required>
+                            <option value="">Rango</option>
+                            <% for (int i = 1; i <= 10; i++) { %>
+                            <option value="<%= i + " kyu" %>"><%= i + " kyu" %></option>
+                            <% } %>
+                        </select>
+
+                        <select name="modality" class="form-control text-center" style="width: 80%;" required>
+                            <option value="">Modalidad</option>
+                            <option value="Kata">Kata</option>
+                            <option value="Kumite">Kumite</option>
+                        </select>
+
+                        <select name="idAcademy" class="form-control text-center" style="width: 80%;" required>
+                            <option value="">Academia</option>
+                            <% for (Academy academy : academies) { %>
+                            <option value="<%= academy.getId() %>"><%= academy.getName() %></option>
+                            <% } %>
+                        </select>
+
+                        <button type="submit" class="btn btn-success">
+                            <i class="bi bi-plus-circle me-1"></i> Agregar Luchador
+                        </button>
+                    </form>
                 </div>
             </div>
         </div>
     </div>
 
     <!-- Script para filtrar las ligas y editar nombres -->
-    <script src="js/league.js"></script>
+    <script src="js/fighter.js"></script>
 </body>
 </html>

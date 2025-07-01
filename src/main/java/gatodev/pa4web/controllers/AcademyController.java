@@ -17,7 +17,7 @@ public class AcademyController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("academies", academyService.getAll().toArray(new Academy[0]));
+        req.setAttribute("academies", academyService.getAll().toArray(Academy[]::new));
         req.getRequestDispatcher("/academy.jsp").forward(req, resp);
     }
 

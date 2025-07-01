@@ -24,30 +24,36 @@ public class FighterController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        List<FighterDTO> fighters = fighterService.getAllFighters()
+        FighterDTO[] fighters = fighterService.getAllFighters()
                 .stream()
                 .map(f -> fighterService
                         .convertToFighterDTO(f, academyService.get(f.getIdAcademy())))
-                .collect(Collectors.toList());
+                .toArray(FighterDTO[]::new);
 
-        req.setAttribute("academies", academyService.getAll());
+        req.setAttribute("academies", academyService.getAll().toArray(Academy[]::new));
         req.setAttribute("fighters", fighters);
         req.getRequestDispatcher("fighter.jsp").forward(req, resp);
     }
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("fullName").trim();
-        String ageStr = req.getParameter("age").trim();
-        String weightStr = req.getParameter("weight").trim();
-        String gender = req.getParameter("gender").trim();
-        String rank = req.getParameter("rank").trim();
-        String modality = req.getParameter("modality").trim();
-        String idAcademyStr = req.getParameter("idAcademy").trim();
+        String name = req.getParameter("fullName");
+        String ageStr = req.getParameter("age");
+        String weightStr = req.getParameter("weight");
+        String gender = req.getParameter("gender");
+        String rank = req.getParameter("rank");
+        String modality = req.getParameter("modality");
+        String idAcademyStr = req.getParameter("idAcademy");
 
-        // Validar campos vacíos
-        if (name.isEmpty() || ageStr.isEmpty() || weightStr.isEmpty() ||
-                gender.isEmpty() || rank.isEmpty() || modality.isEmpty() || idAcademyStr.isEmpty()) {
+        // Validar campos nulos o vacíos
+        if (name == null || name.trim().isEmpty() ||
+                ageStr == null || ageStr.trim().isEmpty() ||
+                weightStr == null || weightStr.trim().isEmpty() ||
+                gender == null || gender.trim().isEmpty() ||
+                rank == null || rank.trim().isEmpty() ||
+                modality == null || modality.trim().isEmpty() ||
+                idAcademyStr == null || idAcademyStr.trim().isEmpty()) {
+
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Todos los campos son obligatorios.");
             return;
         }
@@ -72,9 +78,9 @@ public class FighterController extends HttpServlet {
             return;
         }
 
-        String method = req.getParameter("_method").trim();
+        String method = req.getParameter("_method");
 
-        if ("update".equalsIgnoreCase(method)) {
+        if (method != null && "update".equalsIgnoreCase(method.trim())) {
             String id = req.getParameter("id").trim();
 
             if (id.isEmpty()) {
@@ -93,6 +99,7 @@ public class FighterController extends HttpServlet {
                         .modality(modality)
                         .idAcademy(idAcademy)
                         .build());
+                resp.sendRedirect(req.getContextPath() + "/fighter");
             } catch (NumberFormatException e) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID invalido.");
             }

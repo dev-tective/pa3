@@ -17,7 +17,7 @@ public class LeagueController extends HttpServlet {
 
     @Override
     protected void doGet(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        req.setAttribute("leagues", leagueService.getAll().toArray(new League[0]));
+        req.setAttribute("leagues", leagueService.getAll().toArray(League[]::new));
         req.getRequestDispatcher("/index.jsp").forward(req, resp);
     }
 
