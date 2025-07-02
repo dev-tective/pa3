@@ -1,5 +1,5 @@
 body.bg-bracket {
-    background-color: #0e0e0e;
+    background-color: #343e58;
     color: #ffffff;
     font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
     padding: 20px;
@@ -71,4 +71,25 @@ body.bg-bracket {
 
 h1, h5 {
     text-shadow: 0 2px 4px rgba(0,0,0,0.5);
+}
+/* color de botones */
+.btn-outline-warning {
+    color: #5192d8; /* celeste */
+    border-color: #5192d8;
+}
+
+.btn-outline-warning:hover {
+    background-color: #5192d8;
+    color: black;
+}
+
+/* boton de ver participantes */
+.btn-outline-warning {
+    color: #e27935;           /* Color del texto */
+    border-color: #e27935;    /* Color del borde */
+}
+
+.btn-outline-warning:hover {
+    background-color: #e27935; /* Fondo al hacer hover */
+    color: black;              /* Texto en blanco al hacer hover */
 }
