@@ -11,8 +11,6 @@ import lombok.ToString;
 @ToString
 public class Participant {
     private Integer id;
-    private Integer place;
-    private String state;
     private Integer idFighter;
     private Integer idLeague;
 }

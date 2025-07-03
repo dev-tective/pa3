@@ -41,10 +41,9 @@ public class MatchDAO implements DAO<Match, Integer> {
                     state,
                     id_league,
                     first_participant,
-                    second_participant,
-                    winning_participant
+                    second_participant
                 )
-                VALUES(?,?,?,?,?,?)
+                VALUES(?,?,?,?,?)
                 """;
         
         PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
@@ -64,7 +63,6 @@ public class MatchDAO implements DAO<Match, Integer> {
         ps.setInt(3, match.getIdLeague());
         ps.setInt(4, match.getIdFirstParticipant());
         ps.setInt(5, match.getIdSecondParticipant());
-        ps.setInt(6, match.getIdWinningParticipant());
     }
 
     @Override
@@ -115,8 +113,9 @@ public class MatchDAO implements DAO<Match, Integer> {
                     .phase(rs.getInt("phase"))
                     .state(rs.getString("state"))
                     .idLeague(rs.getInt("id_league"))
-                    .idFirstParticipant(rs.getInt("id_first_participant"))
-                    .idSecondParticipant(rs.getInt("id_second_participant"))
+                    .idFirstParticipant(rs.getInt("first_participant"))
+                    .idSecondParticipant(rs.getInt("second_participant"))
+                    .idWinningParticipant(rs.getInt("winning_participant"))
                     .build());
         }
         
@@ -138,8 +137,9 @@ public class MatchDAO implements DAO<Match, Integer> {
                 .phase(rs.getInt("phase"))
                 .state(rs.getString("state"))
                 .idLeague(rs.getInt("id_league"))
-                .idFirstParticipant(rs.getInt("id_first_participant"))
-                .idSecondParticipant(rs.getInt("id_second_participant"))
+                .idFirstParticipant(rs.getInt("first_participant"))
+                .idSecondParticipant(rs.getInt("second_participant"))
+                .idWinningParticipant(rs.getInt("winning_participant"))
                 .build());
     }
 

@@ -12,8 +12,6 @@ import lombok.ToString;
 @ToString
 public class ParticipantDTO {
     private Integer id;
-    private Integer place;
-    private String state;
+    private Integer leagueId;
     private FighterDTO fighter;
-    private League league;
 }

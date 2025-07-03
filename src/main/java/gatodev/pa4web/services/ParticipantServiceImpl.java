@@ -3,11 +3,11 @@ package gatodev.pa4web.services;
 import gatodev.pa4web.DAO.ParticipantDAO;
 import gatodev.pa4web.DTO.FighterDTO;
 import gatodev.pa4web.DTO.ParticipantDTO;
-import gatodev.pa4web.models.League;
 import gatodev.pa4web.models.Participant;
 
 import java.sql.SQLException;
 import java.util.List;
+import java.util.stream.Collectors;
 
 public class ParticipantServiceImpl implements ParticipantService {
     private final ParticipantDAO participantDAO = ParticipantDAO.instance;
@@ -46,28 +46,29 @@ public class ParticipantServiceImpl implements ParticipantService {
     public Participant getParticipant(Integer id) {
         try {
             return participantDAO.findById(id)
-                    .orElseThrow(() -> new RuntimeException("Participante no encontrado."));
+                    .orElse(null);
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public List<Participant> getParticipants() {
+    public List<Participant> getParticipants(Integer idLeague) {
         try {
-            return participantDAO.findAll();
+            return participantDAO.findAll()
+                    .stream()
+                    .filter(p -> p.getIdLeague().equals(idLeague))
+                    .collect(Collectors.toList());
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
     }
 
     @Override
-    public ParticipantDTO convertToParticipantDTO(Participant participant, FighterDTO fighter, League league) {
+    public ParticipantDTO convertToParticipantDTO(Participant participant, FighterDTO fighter) {
         return ParticipantDTO.builder()
                 .id(participant.getId())
-                .place(participant.getPlace())
-                .state(participant.getState())
-                .league(league)
+                .leagueId(participant.getIdLeague())
                 .fighter(fighter)
                 .build();
     }

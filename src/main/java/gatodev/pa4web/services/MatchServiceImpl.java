@@ -8,7 +8,6 @@ import gatodev.pa4web.models.Match;
 import java.sql.SQLException;
 import java.util.Collections;
 import java.util.List;
-import java.util.Objects;
 import java.util.stream.Collectors;
 
 public class MatchServiceImpl implements MatchService {
@@ -55,9 +54,12 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public List<Match> getMatches() {
+    public List<Match> getMatches(Integer idLeague) {
         try {
-            return matchDAO.findAll();
+            return matchDAO.findAll()
+                    .stream()
+                    .filter(m -> m.getIdLeague().equals(idLeague))
+                    .collect(Collectors.toList());
         } catch (SQLException e) {
             throw new RuntimeException(e.getMessage());
         }
@@ -97,11 +99,7 @@ public class MatchServiceImpl implements MatchService {
             Integer currentPhase = matchDAO.maxPhase(idLeague)
                     .orElseThrow(() -> new RuntimeException("Phase no encontrada."));
 
-            List<Match> matches = getMatches()
-                    .stream()
-                    .filter(m -> m.getIdLeague().equals(idLeague) &&
-                            m.getPhase().equals(currentPhase))
-                    .collect(Collectors.toList());
+            List<Match> matches = getMatches(idLeague);
 
             if (matches.isEmpty() || matches.size() == 1) return false;
 
@@ -148,12 +146,14 @@ public class MatchServiceImpl implements MatchService {
     }
 
     @Override
-    public MatchDTO convertMatchToDTO(Match match, List<ParticipantDTO> participants, ParticipantDTO winner) {
+    public MatchDTO convertMatchToDTO(Match match, ParticipantDTO firstParticipant,
+                                      ParticipantDTO secondParticipant, ParticipantDTO winner) {
         return MatchDTO.builder()
                 .id(match.getIdLeague())
                 .phase(match.getPhase())
                 .state(match.getState())
-                .participants(participants)
+                .firstParticipant(firstParticipant)
+                .secondParticipant(secondParticipant)
                 .winner(winner)
                 .build();
     }

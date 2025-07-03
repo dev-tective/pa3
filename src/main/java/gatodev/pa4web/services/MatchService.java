@@ -16,7 +16,7 @@ public interface MatchService {
 
     Match getMatch(int id);
 
-    List<Match> getMatches();
+    List<Match> getMatches(Integer idLeague);
 
     void generateRandomMatches(Integer idLeague, List<Integer> idParticipants);
 
@@ -24,5 +24,5 @@ public interface MatchService {
 
     boolean nextPhaseMatches(Integer idLeague);
 
-    MatchDTO convertMatchToDTO(Match match, List<ParticipantDTO> participants, ParticipantDTO winner);
+    MatchDTO convertMatchToDTO(Match match, ParticipantDTO first, ParticipantDTO second, ParticipantDTO winner);
 }

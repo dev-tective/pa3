@@ -17,8 +17,6 @@ public class ParticipantDAO implements DAO<Participant, Integer> {
         String sql = """
                 CREATE TABLE IF NOT EXISTS participants (
                     id BIGINT AUTO_INCREMENT PRIMARY KEY,
-                    place INT,
-                    state VARCHAR(20),
                     id_fighter BIGINT REFERENCES fighters,
                     id_league BIGINT REFERENCES leagues
                 );
@@ -35,15 +33,13 @@ public class ParticipantDAO implements DAO<Participant, Integer> {
     @Override
     public Optional<Participant> save(Participant participant) throws SQLException {
         String query = """
-                INSERT INTO participants (place, state, id_fighter, id_league)
-                VALUES (?, ?, ?, ?)
+                INSERT INTO participants (id_fighter, id_league)
+                VALUES (?, ?)
                 """;
 
         PreparedStatement ps = con.prepareStatement(query, Statement.RETURN_GENERATED_KEYS);
-        ps.setInt(1, participant.getPlace());
-        ps.setString(2, participant.getState());
-        ps.setInt(3, participant.getIdFighter());
-        ps.setInt(4, participant.getIdLeague());
+        ps.setInt(1, participant.getIdFighter());
+        ps.setInt(2, participant.getIdLeague());
 
         if (ps.executeUpdate() == 0) return Optional.empty();
 
@@ -57,19 +53,15 @@ public class ParticipantDAO implements DAO<Participant, Integer> {
     public Optional<Participant> update(Participant participant) throws SQLException {
         String query = """
                 UPDATE participants SET
-                    place = ?,
-                    state = ?,
                     id_fighter = ?,
                     id_league = ?
                 WHERE id = ?
                 """;
 
         PreparedStatement ps = con.prepareStatement(query);
-        ps.setInt(1, participant.getPlace());
-        ps.setString(2, participant.getState());
-        ps.setInt(3, participant.getIdFighter());
-        ps.setInt(4, participant.getIdLeague());
-        ps.setInt(5, participant.getId());
+        ps.setInt(1, participant.getIdFighter());
+        ps.setInt(2, participant.getIdLeague());
+        ps.setInt(3, participant.getId());
 
         return ps.executeUpdate() == 0 ? Optional.empty() : Optional.of(participant);
     }
@@ -99,8 +91,6 @@ public class ParticipantDAO implements DAO<Participant, Integer> {
         while (rs.next()) {
             participants.add(Participant.builder()
                     .id(rs.getInt("id"))
-                    .place(rs.getInt("place"))
-                    .state(rs.getString("state"))
                     .idFighter(rs.getInt("id_fighter"))
                     .idLeague(rs.getInt("id_league"))
                     .build());
@@ -121,8 +111,6 @@ public class ParticipantDAO implements DAO<Participant, Integer> {
 
         return !rs.next() ? Optional.empty() : Optional.of(Participant.builder()
                 .id(rs.getInt("id"))
-                .place(rs.getInt("place"))
-                .state(rs.getString("state"))
                 .idFighter(rs.getInt("id_fighter"))
                 .idLeague(rs.getInt("id_league"))
                 .build());

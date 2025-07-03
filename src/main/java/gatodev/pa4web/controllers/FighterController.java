@@ -46,13 +46,15 @@ public class FighterController extends HttpServlet {
         String idAcademyStr = req.getParameter("idAcademy");
 
         // Validar campos nulos o vacíos
-        if (name == null || name.trim().isEmpty() ||
+        if (
+                name == null || name.trim().isEmpty() ||
                 ageStr == null || ageStr.trim().isEmpty() ||
                 weightStr == null || weightStr.trim().isEmpty() ||
                 gender == null || gender.trim().isEmpty() ||
                 rank == null || rank.trim().isEmpty() ||
                 modality == null || modality.trim().isEmpty() ||
-                idAcademyStr == null || idAcademyStr.trim().isEmpty()) {
+                idAcademyStr == null || idAcademyStr.trim().isEmpty()
+        ) {
 
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Todos los campos son obligatorios.");
             return;

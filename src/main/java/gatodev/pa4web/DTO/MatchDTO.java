@@ -15,6 +15,7 @@ public class MatchDTO {
     private Integer id;
     private Integer phase;
     private String state;
-    private List<ParticipantDTO> participants;
+    private ParticipantDTO firstParticipant;
+    private ParticipantDTO secondParticipant;
     private ParticipantDTO winner;
 }

@@ -67,8 +67,8 @@
 
                         <!-- Acciones -->
                         <div class="d-grid gap-2 mt-3">
-                            <a href="participant?leagueId=<%= league.getId() %>" class="btn btn-outline-light">Ver Participantes</a>
-                            <a href="match?leagueId=<%= league.getId() %>" class="btn btn-outline-warning">Ver Partidos</a>
+                            <a href="${pageContext.request.contextPath}/leagueInfo?leagueId=<%= league.getId() %>"
+                               class="btn btn-outline-light">Ver Liga</a>
                         </div>
                     </div>
                 </div>
