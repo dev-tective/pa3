@@ -115,5 +115,20 @@
 
     <!-- Script para filtrar las ligas y editar nombres -->
     <script src="js/league.js"></script>
+    <script>
+        const PASSWORD = "liga123";
+
+        // Verificar si ya está logueado en esta sesión
+        if (!sessionStorage.getItem("isAuthenticated")) {
+            const userInput = prompt("Ingresa la contraseña para acceder a las ligas:");
+
+            if (userInput === PASSWORD) {
+                sessionStorage.setItem("isAuthenticated", "true");
+            } else {
+                alert("Contraseña incorrecta. No tienes acceso.");
+                document.body.innerHTML = "<h2 style='text-align: center; color: red;'>Acceso denegado.</h2>";
+            }
+        }
+    </script>
 </body>
 </html>
