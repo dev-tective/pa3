@@ -63,6 +63,16 @@
                                     <i class="bi bi-check-lg"></i>
                                 </button>
                             </form>
+                            <!-- Botón eliminar -->
+                            <form method="post"
+                                  action="league"
+                                  onsubmit="return confirm('¿Estás seguro de que quieres eliminar esta liga?');">
+                                <input type="hidden" name="_method" value="delete">
+                                <input type="hidden" name="id" value="<%= league.getId() %>">
+                                <button type="submit" class="btn btn-sm btn-danger w-100 mt-2" title="Eliminar">
+                                    <i class="bi bi-trash"></i> Eliminar
+                                </button>
+                            </form>
                         </div>
 
                         <!-- Acciones -->

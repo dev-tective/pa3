@@ -23,6 +23,28 @@ public class AcademyController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+
+        // Primero manejar DELETE
+        if (method != null && "delete".equalsIgnoreCase(method.trim())) {
+            String id = req.getParameter("id");
+
+            if (id == null || id.trim().isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID es obligatorio.");
+                return;
+            }
+
+            try {
+                academyService.delete(Integer.parseInt(id));
+                resp.sendRedirect(req.getContextPath() + "/academy");
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido.");
+            }
+
+            return;
+        }
+
+        // Luego, validar campos comunes
         String name = req.getParameter("academyName");
         String ruc = req.getParameter("ruc");
 
@@ -31,13 +53,11 @@ public class AcademyController extends HttpServlet {
             return;
         }
 
-        String method = req.getParameter("_method");
-
         if (method != null && "update".equalsIgnoreCase(method.trim())) {
             String id = req.getParameter("id").trim();
 
             if (id.isEmpty()) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"ID es obligatorio.");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID es obligatorio.");
                 return;
             }
 
@@ -55,6 +75,7 @@ public class AcademyController extends HttpServlet {
             return;
         }
 
+        // Por defecto: agregar
         academyService.add(Academy.builder()
                 .name(name)
                 .ruc(ruc)

@@ -37,6 +37,27 @@ public class FighterController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
+        String method = req.getParameter("_method");
+
+        // Primero: manejar DELETE antes que cualquier otra cosa
+        if (method != null && "delete".equalsIgnoreCase(method.trim())) {
+            String id = req.getParameter("id");
+            if (id == null || id.trim().isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "El ID es obligatorio.");
+                return;
+            }
+
+            try {
+                fighterService.deleteFighter(Integer.parseInt(id));
+                resp.sendRedirect(req.getContextPath() + "/fighter");
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido.");
+            }
+
+            return;
+        }
+
+        // Segundo: si es UPDATE, validamos con los campos
         String name = req.getParameter("fullName");
         String ageStr = req.getParameter("age");
         String weightStr = req.getParameter("weight");
@@ -48,14 +69,13 @@ public class FighterController extends HttpServlet {
         // Validar campos nulos o vacíos
         if (
                 name == null || name.trim().isEmpty() ||
-                ageStr == null || ageStr.trim().isEmpty() ||
-                weightStr == null || weightStr.trim().isEmpty() ||
-                gender == null || gender.trim().isEmpty() ||
-                rank == null || rank.trim().isEmpty() ||
-                modality == null || modality.trim().isEmpty() ||
-                idAcademyStr == null || idAcademyStr.trim().isEmpty()
+                        ageStr == null || ageStr.trim().isEmpty() ||
+                        weightStr == null || weightStr.trim().isEmpty() ||
+                        gender == null || gender.trim().isEmpty() ||
+                        rank == null || rank.trim().isEmpty() ||
+                        modality == null || modality.trim().isEmpty() ||
+                        idAcademyStr == null || idAcademyStr.trim().isEmpty()
         ) {
-
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Todos los campos son obligatorios.");
             return;
         }
@@ -69,23 +89,19 @@ public class FighterController extends HttpServlet {
             age = Integer.parseInt(ageStr);
             weight = Integer.parseInt(weightStr);
         } catch (NumberFormatException e) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST,
-                    "Edad, peso e ID de academia no son válidos.");
+            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Edad, peso e ID de academia no son válidos.");
             return;
         }
 
-        // Validaciones adicionales
         if (age <= 0 || weight <= 0) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"Edad y peso deben ser mayores que 0.");
             return;
         }
 
-        String method = req.getParameter("_method");
-
+        // Ahora sí procesamos UPDATE
         if (method != null && "update".equalsIgnoreCase(method.trim())) {
-            String id = req.getParameter("id").trim();
-
-            if (id.isEmpty()) {
+            String id = req.getParameter("id");
+            if (id == null || id.trim().isEmpty()) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST,"El ID es obligatorio.");
                 return;
             }
@@ -103,12 +119,13 @@ public class FighterController extends HttpServlet {
                         .build());
                 resp.sendRedirect(req.getContextPath() + "/fighter");
             } catch (NumberFormatException e) {
-                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID invalido.");
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido.");
             }
 
             return;
         }
 
+        // Por defecto: ADD
         fighterService.addFighter(Fighter.builder()
                 .fullName(name)
                 .age(age)

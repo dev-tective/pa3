@@ -103,6 +103,14 @@
                                 </button>
                             </div>
                         </form>
+                        <!-- Botón de eliminar -->
+                        <form method="post" action="fighter" onsubmit="return confirm('¿Estás seguro de que quieres eliminar este luchador?');">
+                            <input type="hidden" name="_method" value="delete">
+                            <input type="hidden" name="id" value="<%= fighter.getId() %>">
+                            <button type="submit" class="btn btn-sm btn-danger" title="Eliminar">
+                                <i class="bi bi-trash"></i>
+                            </button>
+                        </form>
                     </div>
                 </div>
             </div>

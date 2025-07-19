@@ -23,20 +23,35 @@ public class LeagueController extends HttpServlet {
 
     @Override
     protected void doPost(HttpServletRequest req, HttpServletResponse resp) throws ServletException, IOException {
-        String name = req.getParameter("leagueName");
+        String method = req.getParameter("_method");
 
+        // ✅ Manejar eliminación
+        if (method != null && "delete".equalsIgnoreCase(method.trim())) {
+            String id = req.getParameter("id");
+
+            if (id == null || id.trim().isEmpty()) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID es obligatorio.");
+                return;
+            }
+
+            try {
+                leagueService.delete(Integer.parseInt(id.trim()));
+                resp.sendRedirect(req.getContextPath() + "/league");
+            } catch (NumberFormatException e) {
+                resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido.");
+            }
+
+            return;
+        }
+
+        // 🔎 Validación para crear o actualizar
+        String name = req.getParameter("leagueName");
         if (name == null || name.trim().isEmpty()) {
             resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre es obligatorio.");
             return;
         }
 
-        if (name.isEmpty()) {
-            resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "Nombre es obligatorio.");
-            return;
-        }
-
-        String method = req.getParameter("_method");
-
+        // ✅ Actualizar
         if (method != null && "update".equalsIgnoreCase(method.trim())) {
             String id = req.getParameter("id");
             if (id == null || id.trim().isEmpty()) {
@@ -52,12 +67,12 @@ public class LeagueController extends HttpServlet {
                 resp.sendRedirect(req.getContextPath() + "/league");
             } catch (NumberFormatException e) {
                 resp.sendError(HttpServletResponse.SC_BAD_REQUEST, "ID inválido.");
-
             }
 
             return;
         }
 
+        // ✅ Crear
         leagueService.add(League.builder()
                 .name(name)
                 .build());
